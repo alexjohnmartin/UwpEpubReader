@@ -20,8 +20,8 @@
 
         <ListView ItemsSource="{x:Bind Books}" Grid.Row="1">
             <ListView.ItemTemplate>
-                <DataTemplate x:DataType="local:Book">
-                    <Button Content="{x:Bind Name}" Click="BookButton_Click" CommandParameter="{x:Bind BookFile}"/>
+                <DataTemplate x:DataType="local:BookItem">
+                    <Button Content="{x:Bind Name}" Click="BookButton_Click" CommandParameter="{x:Bind}"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

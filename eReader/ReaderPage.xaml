@@ -15,10 +15,23 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <TextBlock x:Name="Textbox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10,0,0,0"/>
-        </StackPanel>
-
+        <Grid Background="White" Grid.Row="0" x:Name="TitleBar">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid Background="{StaticResource AppBarBackgroundThemeBrush}" x:Name="BackButtonGrid">
+                <Button x:Name="BackButton" Click="BackButton_Click">
+                    <TextBlock Text="Back"/>
+                </Button>
+            </Grid>
+            <Grid Grid.Column="1" x:Name="MainTitleBar" Background="Transparent">
+                <TextBlock x:Name="AppTitleText" VerticalAlignment="Center" FontSize="12" FontFamily="Segoe UI" FontWeight="Normal" Margin="10,0"/>
+            </Grid>
+            <Grid Grid.Column="2" x:Name="RightMask"/>
+        </Grid>
+        
         <Pivot ItemsSource="{x:Bind Chapters, Mode=OneWay}"
                x:Name="ChapterPivot"
                SelectionChanged="Pivot_SelectionChanged"

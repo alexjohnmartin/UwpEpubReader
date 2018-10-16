@@ -2,8 +2,11 @@
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Core;
 using Windows.Data.Xml.Dom;
 using Windows.Storage;
+using Windows.UI.Core;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
@@ -17,6 +20,31 @@ namespace eReader
         {
             Chapters = new ObservableCollection<Chapter>();
             this.InitializeComponent();
+
+            this.Loaded += OnLoaded;
+            SystemNavigationManager.GetForCurrentView().BackRequested += OnBackRequested;
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            CoreApplicationViewTitleBar coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
+            coreTitleBar.ExtendViewIntoTitleBar = true;
+            coreTitleBar.IsVisibleChanged += CoreTitleBar_IsVisibleChanged;
+            coreTitleBar.LayoutMetricsChanged += CoreTitleBar_LayoutMetricsChanged;
+
+            TitleBar.Height = coreTitleBar.Height;
+            Window.Current.SetTitleBar(MainTitleBar);
+        }
+
+        private void CoreTitleBar_IsVisibleChanged(CoreApplicationViewTitleBar titleBar, object args)
+        {
+            TitleBar.Visibility = titleBar.IsVisible ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        private void CoreTitleBar_LayoutMetricsChanged(CoreApplicationViewTitleBar sender, object args)
+        {
+            TitleBar.Height = sender.Height;
+            RightMask.Width = sender.SystemOverlayRightInset;
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
@@ -24,17 +52,19 @@ namespace eReader
             base.OnNavigatedTo(e);
 
             var bookDetails = e.Parameter as BookDetails;
-            Textbox.Text = "(loading)";
+            //Textbox.Text = "(loading)";
             try
             {
                 Chapters.Clear();
                 await OpenBook(bookDetails.BookFile);
                 ChapterPivot.SelectedIndex = bookDetails.Chapter;
-                Textbox.Text = "(done)";
+                AppTitleText.Text = "eReader - " + bookDetails.BookFile.Name;
+                //Textbox.Text = "(done)";
             }
             catch (Exception ex)
             {
-                Textbox.Text = "Error: " + ex.Message;
+                //Textbox.Text = "Error: " + ex.Message;
+                AppTitleText.Text = "eReader - ERROR: " + ex.Message;
             }
         }
 
@@ -180,6 +210,25 @@ namespace eReader
             }
 
             return stripped;
+        }
+
+        private void OnBackRequested(object sender, BackRequestedEventArgs e)
+        {
+            GoBack();
+            e.Handled = true;
+        }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            GoBack();
+        }
+
+        private void GoBack()
+        {
+            if (Frame.CanGoBack)
+            {
+                Frame.GoBack();
+            }
         }
     }
 }
