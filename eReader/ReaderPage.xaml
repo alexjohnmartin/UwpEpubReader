@@ -20,6 +20,7 @@
         </StackPanel>
 
         <Pivot ItemsSource="{x:Bind Chapters, Mode=OneWay}"
+               x:Name="ChapterPivot"
                SelectionChanged="Pivot_SelectionChanged"
                Grid.Row="1"
                Padding="5,5,5,5">
@@ -33,7 +34,7 @@
             </Pivot.ItemTemplate>
         </Pivot>
 
-        <WebView x:Name="PivotItemWebView" Grid.Row="2" />
+        <WebView x:Name="PivotItemWebView" Grid.Row="2" NavigationCompleted="WebView_NavigationCompleted" />
 
         <!--<Pivot>
             <PivotItem Header="1">

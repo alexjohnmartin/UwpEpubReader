@@ -11,11 +11,19 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <Button Content="open" Click="Button_Click"/>
+            <Button Content="open" Click="ImportButton_Click"/>
         </StackPanel>
 
+        <ListView ItemsSource="{x:Bind Books}" Grid.Row="1">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="local:Book">
+                    <Button Content="{x:Bind Name}" Click="BookButton_Click" CommandParameter="{x:Bind BookFile}"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </Grid>
 </Page>

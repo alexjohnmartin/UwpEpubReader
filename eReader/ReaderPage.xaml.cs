@@ -23,12 +23,13 @@ namespace eReader
         {
             base.OnNavigatedTo(e);
 
-            var bookFile = e.Parameter as StorageFile;
+            var bookDetails = e.Parameter as BookDetails;
             Textbox.Text = "(loading)";
             try
             {
                 Chapters.Clear();
-                await OpenBook(bookFile);
+                await OpenBook(bookDetails.BookFile);
+                ChapterPivot.SelectedIndex = bookDetails.Chapter;
                 Textbox.Text = "(done)";
             }
             catch (Exception ex)
@@ -37,6 +38,11 @@ namespace eReader
             }
         }
 
+        private void WebView_NavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
+        {
+            // TOOD: monitor scroll position   
+        }
+        
         private async void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var pivot = sender as Pivot;
@@ -61,6 +67,8 @@ namespace eReader
             }
 
             PivotItemWebView.NavigateToString(fileText);
+
+            // remember current page
         }
 
         private async Task OpenBook(StorageFile bookFile)
@@ -173,19 +181,5 @@ namespace eReader
 
             return stripped;
         }
-    }
-
-    public class Chapter
-    {
-        public Chapter(string name, Uri uri, IStorageFile bookFile)
-        {
-            this.Name = name;
-            this.Uri = uri;
-            this.File = bookFile;
-        }
-
-        public string Name { get; private set; }
-        public Uri Uri { get; private set; }
-        public IStorageFile File { get; private set; }
     }
 }
