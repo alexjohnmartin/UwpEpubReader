@@ -9,6 +9,36 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <RichTextBlock x:Name="Textbox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <TextBlock x:Name="Textbox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10,0,0,0"/>
+        </StackPanel>
+
+        <Pivot ItemsSource="{x:Bind Chapters, Mode=OneWay}"
+               SelectionChanged="Pivot_SelectionChanged"
+               Grid.Row="1"
+               Padding="5,5,5,5">
+            <Pivot.HeaderTemplate>
+                <DataTemplate x:DataType="local:Chapter">
+                    <TextBlock Text="{x:Bind Name, Mode=OneWay}"/>
+                </DataTemplate>
+            </Pivot.HeaderTemplate>
+            <Pivot.ItemTemplate>
+                <DataTemplate />
+            </Pivot.ItemTemplate>
+        </Pivot>
+
+        <WebView x:Name="PivotItemWebView" Grid.Row="2" />
+
+        <!--<Pivot>
+            <PivotItem Header="1">
+                <TextBlock Text="test"/>
+            </PivotItem>
+        </Pivot>-->
     </Grid>
 </Page>
