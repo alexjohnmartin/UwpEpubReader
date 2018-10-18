@@ -49,10 +49,5 @@
 
         <WebView x:Name="PivotItemWebView" Grid.Row="2" NavigationCompleted="WebView_NavigationCompleted" />
 
-        <!--<Pivot>
-            <PivotItem Header="1">
-                <TextBlock Text="test"/>
-            </PivotItem>
-        </Pivot>-->
     </Grid>
 </Page>

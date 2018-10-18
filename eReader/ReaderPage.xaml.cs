@@ -96,6 +96,14 @@ namespace eReader
                 //fileText = fileText.Replace(oldLink, oldLinkConverted);
             }
 
+            // update style of page to shrink the text
+            regex = new Regex(@"<head>.*<\/head>");
+            matches = regex.Matches(fileText);
+            foreach (var match in matches)
+            {
+                fileText = fileText.Replace(match.ToString(), "<head><title>blah</title><style>p { font-size: 75%; }</style><head>");
+            }
+
             PivotItemWebView.NavigateToString(fileText);
 
             // remember current page
